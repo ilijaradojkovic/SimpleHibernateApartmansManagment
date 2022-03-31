@@ -5,11 +5,17 @@
  */
 package com.apartmani.sremac.hibernatesimpleapartmansmanage.controller;
 
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.interfaces.IController;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.models.Gost;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.utility.HibernateUtility;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+
 /**
  *
  * @author radoj
  */
-public class GostController {
+public class GostController implements  IController<Gost>{
     
     
     private static GostController instance
@@ -20,5 +26,20 @@ public class GostController {
     }
     private GostController(){
         
+    }
+
+
+
+    @Override
+    public void Reserve(Gost entity) {
+        try(Session s = HibernateUtility.getSessionFactory().openSession()) {
+            s.getTransaction().begin();
+            s.save(entity);
+            s.getTransaction().commit();
+        
+        }catch(Exception e){
+           
+            System.err.println(e.getMessage());
+        }
     }
 }
