@@ -5,6 +5,12 @@
  */
 package com.apartmani.sremac.hibernatesimpleapartmansmanage;
 
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.GostController;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.models.Gost;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 /**
  *
  * @author radoj
@@ -31,29 +37,31 @@ public class MainForm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         SearchButton = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        ImeTxt = new javax.swing.JTextField();
         Od = new javax.swing.JLabel();
-        NazivTxt1 = new javax.swing.JTextField();
+        PrezimeTxt = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         P = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        ApartmanCmb = new javax.swing.JComboBox<>();
         ReserveButton = new javax.swing.JButton();
-        datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
-        datePicker2 = new com.github.lgooddatepicker.components.DatePicker();
         jLabel3 = new javax.swing.JLabel();
         Od1 = new javax.swing.JLabel();
-        ImeTxt1 = new javax.swing.JTextField();
+        ImeTxt = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        PolCmb = new javax.swing.JComboBox<>();
+        DatumOd = new com.toedter.calendar.JDateChooser();
+        DatumDo = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(590, 400));
+        setSize(new java.awt.Dimension(400, 400));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
         SearchButton.setText("Pretrazi");
-        SearchButton.setToolTipText("");
+        SearchButton.setToolTipText("Pretrazi po apartmanu");
 
-        jTextField1.setToolTipText("Pretrazi po apartmanu");
+        jTextField1.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -78,14 +86,11 @@ public class MainForm extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 60));
 
-        ImeTxt.setToolTipText("Pretrazi po apartmanu");
-        getContentPane().add(ImeTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 140, -1));
-
         Od.setText("Do");
         getContentPane().add(Od, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, -1, -1));
 
-        NazivTxt1.setToolTipText("Pretrazi po apartmanu");
-        getContentPane().add(NazivTxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 105, -1));
+        PrezimeTxt.setToolTipText("Pretrazi po apartmanu");
+        getContentPane().add(PrezimeTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 105, -1));
 
         jLabel2.setText("Prezime");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
@@ -93,8 +98,7 @@ public class MainForm extends javax.swing.JFrame {
         P.setText("Pol");
         getContentPane().add(P, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Musko", "Zensko", "Drugo" }));
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 100, -1));
+        getContentPane().add(ApartmanCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 150, -1));
 
         ReserveButton.setText("Rezervisi");
         ReserveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -103,8 +107,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(ReserveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
-        getContentPane().add(datePicker1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, -1, -1));
-        getContentPane().add(datePicker2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, -1, -1));
 
         jLabel3.setText("Apartman");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, -1, -1));
@@ -112,19 +114,39 @@ public class MainForm extends javax.swing.JFrame {
         Od1.setText("Od");
         getContentPane().add(Od1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 20, -1));
 
-        ImeTxt1.setToolTipText("Pretrazi po apartmanu");
-        getContentPane().add(ImeTxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 105, -1));
+        ImeTxt.setToolTipText("Pretrazi po apartmanu");
+        getContentPane().add(ImeTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 105, -1));
 
         jLabel4.setText("Ime");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
+        PolCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Musko", "Zensko", "Drugo" }));
+        getContentPane().add(PolCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 100, -1));
+
+        DatumOd.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                DatumOdPropertyChange(evt);
+            }
+        });
+        getContentPane().add(DatumOd, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 160, -1));
+        getContentPane().add(DatumDo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 160, -1));
+
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void ReserveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveButtonActionPerformed
-      
-        
+  
+         
+        Gost g=new Gost(ImeTxt.getText(),PrezimeTxt.getText(),PolCmb.getSelectedItem().toString(),DatumOd.getDate(),DatumDo.getDate());
+       // Gost g=new Gost();
+        GostController.getInstance().Reserve(g);
     }//GEN-LAST:event_ReserveButtonActionPerformed
+
+    private void DatumOdPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_DatumOdPropertyChange
+        if(DatumOd==null) return;
+        DatumDo.setMinSelectableDate(DatumOd.getDate());
+    }//GEN-LAST:event_DatumOdPropertyChange
 
     /**
      * @param args the command line arguments
@@ -162,17 +184,17 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ApartmanCmb;
+    private com.toedter.calendar.JDateChooser DatumDo;
+    private com.toedter.calendar.JDateChooser DatumOd;
     private javax.swing.JTextField ImeTxt;
-    private javax.swing.JTextField ImeTxt1;
-    private javax.swing.JTextField NazivTxt1;
     private javax.swing.JLabel Od;
     private javax.swing.JLabel Od1;
     private javax.swing.JLabel P;
+    private javax.swing.JComboBox<String> PolCmb;
+    private javax.swing.JTextField PrezimeTxt;
     private javax.swing.JButton ReserveButton;
     private javax.swing.JButton SearchButton;
-    private com.github.lgooddatepicker.components.DatePicker datePicker1;
-    private com.github.lgooddatepicker.components.DatePicker datePicker2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
