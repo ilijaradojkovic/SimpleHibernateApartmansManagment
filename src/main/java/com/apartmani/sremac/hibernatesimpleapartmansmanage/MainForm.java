@@ -5,23 +5,46 @@
  */
 package com.apartmani.sremac.hibernatesimpleapartmansmanage;
 
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.ApartmanController;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.GostController;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.interfaces.IController;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.models.Apartman;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.models.Gost;
+import com.toedter.calendar.JTextFieldDateEditor;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author radoj
  */
-public class MainForm extends javax.swing.JFrame {
+public class MainForm extends javax.swing.JFrame implements INotify{
 
     /**
      * Creates new form MainForm
      */
+    IController<Gost> gostController;
+    ApartmanController apartmanController;
     public MainForm() {
         initComponents();
+        apartmanController=new ApartmanController();
+      
+        
+     
+        ApartmanCmb.setModel(new DefaultComboBoxModel<>(apartmanController.getApartmans()));
+   
+        gostController=new GostController(this);
+       JTextFieldDateEditor editor = (JTextFieldDateEditor) DatumDo.getDateEditor();
+        editor.setEditable(false);
+               JTextFieldDateEditor editor1 = (JTextFieldDateEditor) DatumOd.getDateEditor();
+        editor1.setEditable(false);
        
     }
 
@@ -98,7 +121,7 @@ public class MainForm extends javax.swing.JFrame {
         P.setText("Pol");
         getContentPane().add(P, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
-        getContentPane().add(ApartmanCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 150, -1));
+        getContentPane().add(ApartmanCmb, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 160, -1));
 
         ReserveButton.setText("Rezervisi");
         ReserveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -137,10 +160,20 @@ public class MainForm extends javax.swing.JFrame {
 
     private void ReserveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveButtonActionPerformed
   
-         
-        Gost g=new Gost(ImeTxt.getText(),PrezimeTxt.getText(),PolCmb.getSelectedItem().toString(),DatumOd.getDate(),DatumDo.getDate());
-       // Gost g=new Gost();
-        GostController.getInstance().Reserve(g);
+        
+         if(DatumOd.getDate().before(DatumDo.getDate())){
+             Apartman a=apartmanController.getApartman(ApartmanCmb.getSelectedItem().toString());
+             if(a!=null){
+                        Gost g=new Gost(ImeTxt.getText(),PrezimeTxt.getText(),PolCmb.getSelectedItem().toString(),DatumOd.getDate(),DatumDo.getDate(),a.getIdApartman());
+
+      gostController.Reserve(g);
+             }
+             else{
+                notify("Apartman nije dobro selektovan");
+             }
+ 
+         }
+         else notify("Datum nije dobar");
     }//GEN-LAST:event_ReserveButtonActionPerformed
 
     private void DatumOdPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_DatumOdPropertyChange
@@ -201,4 +234,9 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void notify(String message) {
+       JOptionPane.showMessageDialog(rootPane, message);
+    }
 }

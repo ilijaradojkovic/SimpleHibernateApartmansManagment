@@ -5,8 +5,11 @@
  */
 package com.apartmani.sremac.hibernatesimpleapartmansmanage.controller;
 
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.INotify;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.interfaces.IController;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.models.Gost;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.services.GostService;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.services.IService;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.utility.HibernateUtility;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -17,29 +20,24 @@ import org.hibernate.Session;
  */
 public class GostController implements  IController<Gost>{
     
-    
-    private static GostController instance
-;    
-    public static GostController getInstance(){
-        if(instance==null) instance=new GostController();
-        return instance;
-    }
-    private GostController(){
-        
+    private IService service;
+    private INotify notify;
+ 
+
+    public  GostController(INotify notify){
+        service=new GostService();
+        this.notify=notify;
     }
 
 
 
     @Override
     public void Reserve(Gost entity) {
-        try(Session s = HibernateUtility.getSessionFactory().openSession()) {
-            s.getTransaction().begin();
-            s.save(entity);
-            s.getTransaction().commit();
+        if(!service.Exists(entity))
+            service.Insert(entity);
         
-        }catch(Exception e){
-           
-            System.err.println(e.getMessage());
+        else {
+            notify.notify("Rezervisano je vec");
         }
     }
 }

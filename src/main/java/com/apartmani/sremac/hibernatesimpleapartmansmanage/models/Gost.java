@@ -36,6 +36,10 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Gost.findByDatumDo", query = "SELECT g FROM Gost g WHERE g.datumDo = :datumDo")})
 public class Gost implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "Apartman")
+    private int apartman;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,8 +71,8 @@ public class Gost implements Serializable {
         this.idGost = idGost;
     }
 
-    public Gost(String ime, String prezime, String pol, Date datumOd, Date datumDo) {
-
+    public Gost(String ime, String prezime, String pol, Date datumOd, Date datumDo,int idApartmana) {
+this.apartman=idApartmana;
         this.ime = ime;
         this.prezime = prezime;
         this.pol = pol;
@@ -147,6 +151,14 @@ public class Gost implements Serializable {
     @Override
     public String toString() {
         return "Gost{" + "idGost=" + idGost + ", ime=" + ime + ", prezime=" + prezime + ", pol=" + pol + ", datumOd=" + datumOd + ", datumDo=" + datumDo + '}';
+    }
+
+    public int getApartman() {
+        return apartman;
+    }
+
+    public void setApartman(int apartman) {
+        this.apartman = apartman;
     }
 
     

@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.interfaces;
+package com.apartmani.sremac.hibernatesimpleapartmansmanage.services;
 
 /**
  *
  * @author radoj
- * @param <T> tip sa kojim se radi
+ * @param <T>
  */
-public interface IController<T> {
-    void Reserve(T entity);
+public interface IService <T>{
+    void Insert(T entity);
+    T Find(T entity);
+    boolean Exists(T entity);
 }
