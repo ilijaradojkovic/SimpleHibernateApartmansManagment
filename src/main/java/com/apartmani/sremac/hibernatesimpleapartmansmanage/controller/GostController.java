@@ -7,10 +7,12 @@ package com.apartmani.sremac.hibernatesimpleapartmansmanage.controller;
 
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.INotify;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.controller.interfaces.IController;
+import com.apartmani.sremac.hibernatesimpleapartmansmanage.models.Apartman;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.models.Gost;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.services.GostService;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.services.IService;
 import com.apartmani.sremac.hibernatesimpleapartmansmanage.utility.HibernateUtility;
+import java.util.Date;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
@@ -39,5 +41,18 @@ public class GostController implements  IController<Gost>{
         else {
             notify.notify("Rezervisano je vec");
         }
+    }
+
+    @Override
+    public void Search(Date dateDo,Date dateOd, Apartman apartman) {
+        
+        if(dateDo==null || dateOd==null)  notify.notify("Datum nije unet");
+       if(service.Exists(new Gost(dateOd,dateDo,apartman.getIdApartman()))){
+           notify.notify("Zauzeto");
+       }
+       else{
+           notify.notify("Nije zauzeto");
+       }
+        
     }
 }
